@@ -58,5 +58,11 @@ public class EmployeeApplication {
 		}
 		return null;
 	}
+
+	public void deleteEmployee(Long id) {
+		if (employeeRepository.findById(id).get() instanceof Employee) {
+			employeeRepository.deleteById(id);;
+		}
+	}
 	
 	}

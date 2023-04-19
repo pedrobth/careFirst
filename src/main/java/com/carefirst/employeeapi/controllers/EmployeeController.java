@@ -2,6 +2,7 @@ package com.carefirst.employeeapi.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,28 +20,35 @@ import com.carefirst.employeeapi.domain.model.Employee;
 @RequestMapping("/employees")
 public class EmployeeController {
 	private final EmployeeApplication employeeApp;
-	
+
 	public EmployeeController(EmployeeApplication employeeApp) {
 		this.employeeApp = employeeApp;
 	}
-	
-    @GetMapping
-    public List<EmployeeDto> getAllEmployees(){
-    	return employeeApp.getAll();
-    }
-    
-    @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id){
-    	return employeeApp.getById(id);
-    }
-    
-    @PostMapping
-    public EmployeeCreatedDto insertEmployee(@RequestBody Employee employee) {
-    	return employeeApp.saveEmployee(employee);
-    }
-    
-    @PutMapping("/{id}")
-    public EmployeeCreatedDto updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
-    	return employeeApp.updateEmployee(id, employee);
-    }
+
+	@GetMapping
+	public List<EmployeeDto> getAllEmployees() {
+		return employeeApp.getAll();
+	}
+
+	@GetMapping("/{id}")
+	public Employee getEmployeeById(@PathVariable Long id) {
+		return employeeApp.getById(id);
+	}
+
+	@PostMapping
+	public EmployeeCreatedDto insertEmployee(@RequestBody Employee employee) {
+		return employeeApp.saveEmployee(employee);
+	}
+
+	@PutMapping("/{id}")
+	public EmployeeCreatedDto updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+		return employeeApp.updateEmployee(id, employee);
+	}
+
+	@DeleteMapping("/{id}")
+	public String deleteEmployee(@PathVariable Long id) {
+		employeeApp.deleteEmployee(id);
+		String exEmployee = id.toString();
+		return " =[ You just fired: " + exEmployee;
+	}
 }
