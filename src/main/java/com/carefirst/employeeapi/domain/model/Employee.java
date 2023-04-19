@@ -51,7 +51,6 @@ public class Employee {
 	        this.department = department;
 	        this.location = location;
 	        this.startDate = startDate;
-	        this.employeeId = employeeId;
 	        this.managerReportingId = managerReportingId;
 	    }
 
