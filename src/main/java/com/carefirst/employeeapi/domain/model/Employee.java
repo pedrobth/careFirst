@@ -34,14 +34,12 @@ public class Employee {
 
 	private LocalDate startDate;
 
-	private Long employeeId;
-
 	private Long managerReportingId;
 	
 	 public Employee() {
 	    }
 
-	    public Employee(String firstName, String lastName, String emailAddress, String phone, LocalDate birthDate, String jobTitle, String department, String location, LocalDate startDate, Long employeeId, Long managerReportingId) {
+	    public Employee(String firstName, String lastName, String emailAddress, String phone, LocalDate birthDate, String jobTitle, String department, String location, LocalDate startDate, Long managerReportingId) {
 	        this.firstName = firstName;
 	        this.lastName = lastName;
 	        this.emailAddress = emailAddress;
@@ -132,14 +130,6 @@ public class Employee {
 
 	    public void setStartDate(LocalDate startDate) {
 	        this.startDate = startDate;
-	    }
-
-	    public Long getEmployeeId() {
-	        return employeeId;
-	    }
-
-	    public void setEmployeeId(Long employeeId) {
-	        this.employeeId = employeeId;
 	    }
 
 	    public Long getManagerReportingId() {

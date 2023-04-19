@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.carefirst.employeeapi.application.dto.EmployeeCreatedDto;
 import com.carefirst.employeeapi.application.dto.EmployeeDto;
+import com.carefirst.employeeapi.application.dto.EmployeeExtension;
 import com.carefirst.employeeapi.domain.model.Employee;
 import com.carefirst.employeeapi.domain.repository.EmployeeRepository;
 
@@ -45,5 +46,17 @@ public class EmployeeApplication {
         EmployeeCreatedDto employeeCreatedDto = EmployeeCreatedDto.castToEmployeeCreatedDto(employeeCreated);
         return employeeCreatedDto;
     }
+
+	public EmployeeCreatedDto updateEmployee(Long id, Employee employee) {
+		Employee existingEmployee = employeeRepository.findById(id).get();
+		if (existingEmployee instanceof Employee) {
+			EmployeeExtension.updateValidProperties(existingEmployee, employee);
+			employeeRepository.save(existingEmployee);
+			
+			EmployeeCreatedDto employeeCreatedDto = EmployeeCreatedDto.castToEmployeeCreatedDto(existingEmployee);
+        return employeeCreatedDto;
+		}
+		return null;
+	}
 	
 	}
