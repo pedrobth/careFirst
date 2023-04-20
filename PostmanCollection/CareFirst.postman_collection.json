@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "3ce50065-1bad-47af-9306-f6bf0a33cfb0",
+		"name": "CareFirst",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19930802"
+	},
+	"item": [
+		{
+			"name": "1-createEmployee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"  pm.collectionVariables.set(\"userId\", pm.response.json().id);\r",
+							"});\r",
+							"pm.test(\"Ensure the correct user id\", function () {\r",
+							"  var response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property(\"id\", pm.collectionVariables.get(\"userId\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Jhn\",\r\n  \"lastName\": \"now\",\r\n  \"emailAddress\": \"ohnnow@example.com\",\r\n  \"phone\": \"123-456-7891\",\r\n  \"birthDate\": \"1990-01-02\",\r\n  \"jobTitle\": \"Developer\",\r\n  \"department\": \"ti\",\r\n  \"location\": \"Baltimore-MD\",\r\n  \"startDate\": \"2023-04-24\",\r\n  \"managerReportingId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-employees",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Ensure the correct user id\", function (){\r",
+							"  var response = pm.response.json();\r",
+							"  pm.expect(response[0]).to.have.property(\"id\", pm.collectionVariables.get(\"userId\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Ensure that is only one user on db\", function (){\r",
+							"  var response = pm.response.json();\r",
+							"  console.log(response);\r",
+							"  pm.expect(response.length).to.equal(1)\r",
+							"  pm.collectionVariables.set(\"firstName\", response.firstName);\r",
+							"  pm.collectionVariables.set(\"lastName\", response.lastName);\r",
+							"  pm.collectionVariables.set(\"emailAddress\", response.emailAddress);\r",
+							"  pm.collectionVariables.set(\"jobTitle\", response.jobTitle);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-updateEmployee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Ensure the correct user id\", function () {\r",
+							"  var response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property(\"id\", pm.collectionVariables.get(\"userId\"));\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"  url: \"http://localhost:8080/employees/\" + pm.collectionVariables.get(\"userId\"),\r",
+							"  method: \"GET\",\r",
+							"  header: {\r",
+							"    \"Content-Type\": \"application/json\"\r",
+							"  }\r",
+							"}, function (err, resp) {\r",
+							"  var response = resp.json();\r",
+							"  console.log(response);\r",
+							"  pm.test(\"Ensure the correct user data\", function () {\r",
+							"    pm.expect(response.firstName).to.eql(\"John\");\r",
+							"    pm.expect(response.lastName).to.equal(\"Snow\");\r",
+							"    pm.expect(response.emailAddress).to.equal(\"johnsnow@example.com\");\r",
+							"    pm.expect(response.phone).to.equal(\"123-456-7890\");\r",
+							"    pm.expect(response.birthDate).to.equal(\"1990-01-01\");\r",
+							"    pm.expect(response.jobTitle).to.equal(\"Software Developer\");\r",
+							"    pm.expect(response.department).to.equal(\"IT\");\r",
+							"    pm.expect(response.location).to.equal(\"Baltimore - MD\");\r",
+							"    pm.expect(response.startDate).to.equal(\"2023-04-25\");\r",
+							"    pm.expect(response.managerReportingId).to.equal(3);\r",
+							"    pm.collectionVariables.set(\"firstName\", response.firstName);\r",
+							"    pm.collectionVariables.set(\"lastName\", response.lastName);\r",
+							"    pm.collectionVariables.set(\"emailAddress\", response.emailAddress);\r",
+							"    pm.collectionVariables.set(\"jobTitle\", response.jobTitle);\r",
+							"\r",
+							"  });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Snow\",\r\n    \"emailAddress\": \"johnsnow@example.com\",\r\n    \"phone\": \"123-456-7890\",\r\n    \"birthDate\": \"1990-01-01\",\r\n    \"jobTitle\": \"Software Developer\",\r\n    \"department\": \"IT\",\r\n    \"location\": \"Baltimore - MD\",\r\n    \"startDate\": \"2023-04-25\",\r\n    \"managerReportingId\": 3\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/employees/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4-employees/{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Ensure the correct user id\", function (){\r",
+							"  var response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property(\"id\", pm.collectionVariables.get(\"userId\"));\r",
+							"\r",
+							"  pm.collectionVariables.set(\"useName\", response.firstName);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/employees/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5-deleteEmployee/{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"  url: \"http://localhost:8080/employees/\" + pm.collectionVariables.get(\"userId\"),\r",
+							"  method: \"GET\",\r",
+							"  header: {\r",
+							"    \"Content-Type\": \"application/json\"\r",
+							"  }\r",
+							"}, function (err, resp) {\r",
+							"  var response = resp.json();\r",
+							"  console.log(response);\r",
+							"  pm.test(\"Ensure the correct user data\", function () {\r",
+							"    pm.expect(response.status).to.not.eql(200);\r",
+							"  });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/employees/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// pm.collectionVariables.set(\"base_url\", \"http://localhost\");",
+					"pm.globals.set(\"base_url\", \"http://localhost\");"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "useName",
+			"value": ""
+		},
+		{
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"key": "emailAddress",
+			"value": ""
+		},
+		{
+			"key": "jobTitle",
+			"value": ""
+		}
+	]
+}
