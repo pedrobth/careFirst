@@ -1,6 +1,7 @@
 package com.carefirst.employeeapi.application;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.carefirst.employeeapi.application.dto.EmployeeCreatedDto;
 import com.carefirst.employeeapi.application.dto.EmployeeDto;
 import com.carefirst.employeeapi.application.dto.EmployeeExtension;
+import com.carefirst.employeeapi.domain.common.MyHttpStatus;
+import com.carefirst.employeeapi.domain.common.MyResultT;
 import com.carefirst.employeeapi.domain.model.Employee;
 import com.carefirst.employeeapi.domain.repository.EmployeeRepository;
 
@@ -34,10 +37,19 @@ public class EmployeeApplication {
 		return new ArrayList<EmployeeDto>(employeeDtoList);
 	}
 
-	public Employee getById(Long id) {
-		Employee employee;
-		employee = employeeRepository.findById(id).get();
-		return employee;		
+//		Integer.parseInt(id);
+	public MyResultT<Employee> getById(Long id) {
+		Optional<Employee> employee;
+		employee = employeeRepository.findById(id);
+		if (!employee.isPresent()) {
+			List<String> notFoundMessage = new ArrayList<>();
+			notFoundMessage.add("invalid user");
+			MyResultT<Employee> employeeNotFound = new MyResultT<Employee>(MyHttpStatus.NOT_FOUND, notFoundMessage, null);
+			return employeeNotFound;
+		}
+		
+		MyResultT<Employee> employeeResult = new MyResultT<Employee>(MyHttpStatus.OK, null, employee.get()); 
+		return employeeResult;
 		}
 		
 	

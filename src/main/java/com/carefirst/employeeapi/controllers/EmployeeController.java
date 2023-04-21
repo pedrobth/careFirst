@@ -2,6 +2,7 @@ package com.carefirst.employeeapi.controllers;
 
 import java.util.List;
 
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.carefirst.employeeapi.application.EmployeeApplication;
 import com.carefirst.employeeapi.application.dto.EmployeeCreatedDto;
 import com.carefirst.employeeapi.application.dto.EmployeeDto;
+import com.carefirst.employeeapi.domain.common.MyResultT;
 import com.carefirst.employeeapi.domain.model.Employee;
 
 @RestController
@@ -31,8 +33,8 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/{id}")
-	public Employee getEmployeeById(@PathVariable Long id) {
-		return employeeApp.getById(id);
+	public MyResultT<Employee> getEmployeeById(@PathVariable Long id) {
+		return employeeApp.getById(id);		
 	}
 
 	@PostMapping
