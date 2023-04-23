@@ -52,8 +52,14 @@ public class EmployeeController {
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PutMapping("/{id}")
+	// handle not existing employee, could create one, or return not found
 	public EmployeeCreatedDto updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
-		return employeeApp.updateEmployee(id, employee);
+		EmployeeCreatedDto employeeResponse = employeeApp.updateEmployee(id, employee);
+		if (employeeResponse == null) {
+			throw new NotFoundException("The user with the id: " + id + " was not found. Please try again with a valid ID or use the POST method at baseUrl/employees route.");
+		}
+		
+		return employeeResponse;
 	}
 
 	@ResponseStatus(HttpStatus.OK)

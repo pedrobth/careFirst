@@ -51,15 +51,17 @@ public class EmployeeApplication {
 	}
 
 	public EmployeeCreatedDto updateEmployee(Long id, Employee employee) {
-		Employee existingEmployee = employeeRepository.findById(id).get();
-		if (existingEmployee instanceof Employee) {
-			EmployeeExtension.updateValidProperties(existingEmployee, employee);
-			employeeRepository.save(existingEmployee);
-
-			EmployeeCreatedDto employeeCreatedDto = EmployeeCreatedDto.castToEmployeeCreatedDto(existingEmployee);
-			return employeeCreatedDto;
+		Optional<Employee> employeeResponse = employeeRepository.findById(id);
+		if (!employeeResponse.isPresent()) {
+			return null;
 		}
-		return null;
+		
+		Employee existingEmployee = employeeResponse.get();
+		EmployeeExtension.updateValidProperties(existingEmployee, employee);
+		employeeRepository.save(existingEmployee);
+		
+		EmployeeCreatedDto employeeCreatedDto = EmployeeCreatedDto.castToEmployeeCreatedDto(existingEmployee);
+		return employeeCreatedDto;
 	}
 
 	public Employee deleteEmployee(Long id) {
