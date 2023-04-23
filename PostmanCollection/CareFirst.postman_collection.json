@@ -14,7 +14,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {\r",
-							"  pm.response.to.have.status(200);\r",
+							"  pm.response.to.have.status(201);\r",
 							"  pm.collectionVariables.set(\"userId\", pm.response.json().id);\r",
 							"});\r",
 							"pm.test(\"Ensure the correct user id\", function () {\r",
@@ -69,7 +69,6 @@
 							"\r",
 							"pm.test(\"Ensure that is only one user on db\", function (){\r",
 							"  var response = pm.response.json();\r",
-							"  console.log(response);\r",
 							"  pm.expect(response.length).to.equal(1)\r",
 							"  pm.collectionVariables.set(\"firstName\", response.firstName);\r",
 							"  pm.collectionVariables.set(\"lastName\", response.lastName);\r",
@@ -107,12 +106,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Ensure the correct user id\", function () {\r",
-							"  var response = pm.response.json();\r",
-							"  pm.expect(response).to.have.property(\"id\", pm.collectionVariables.get(\"userId\"));\r",
+							"  pm.response.to.have.status(204);\r",
 							"});\r",
 							"\r",
 							"pm.sendRequest({\r",
@@ -193,7 +187,6 @@
 							"pm.test(\"Ensure the correct user id\", function (){\r",
 							"  var response = pm.response.json();\r",
 							"  pm.expect(response).to.have.property(\"id\", pm.collectionVariables.get(\"userId\"));\r",
-							"\r",
 							"  pm.collectionVariables.set(\"useName\", response.firstName);\r",
 							"});"
 						],
@@ -240,14 +233,12 @@
 							"pm.sendRequest({\r",
 							"  url: \"http://localhost:8080/employees/\" + pm.collectionVariables.get(\"userId\"),\r",
 							"  method: \"GET\",\r",
-							"  header: {\r",
-							"    \"Content-Type\": \"application/json\"\r",
-							"  }\r",
+							"  \r",
 							"}, function (err, resp) {\r",
-							"  var response = resp.json();\r",
-							"  console.log(response);\r",
-							"  pm.test(\"Ensure the correct user data\", function () {\r",
-							"    pm.expect(response.status).to.not.eql(200);\r",
+							"  pm.test(\"Ensure user is not on database\", function () {\r",
+							"    pm.expect(resp.status).to.equal(\"Not Found\");\r",
+							"    var response = resp.json();\r",
+							"    pm.expect(response.message).to.eql(\"User could not be found with id: \" + pm.collectionVariables.get(\"userId\"));\r",
 							"  });\r",
 							"});"
 						],
