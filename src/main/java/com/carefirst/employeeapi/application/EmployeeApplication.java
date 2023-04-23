@@ -2,7 +2,6 @@ package com.carefirst.employeeapi.application;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -41,33 +40,36 @@ public class EmployeeApplication {
 		if (!employee.isPresent()) {
 			return null;
 		}
-		
+
 		return employee.get();
-		}
-		
-	
+	}
+
 	public EmployeeCreatedDto saveEmployee(Employee employee) {
-        Employee employeeCreated = employeeRepository.save(employee);
-        EmployeeCreatedDto employeeCreatedDto = EmployeeCreatedDto.castToEmployeeCreatedDto(employeeCreated);
-        return employeeCreatedDto;
-    }
+		Employee employeeCreated = employeeRepository.save(employee);
+		EmployeeCreatedDto employeeCreatedDto = EmployeeCreatedDto.castToEmployeeCreatedDto(employeeCreated);
+		return employeeCreatedDto;
+	}
 
 	public EmployeeCreatedDto updateEmployee(Long id, Employee employee) {
 		Employee existingEmployee = employeeRepository.findById(id).get();
 		if (existingEmployee instanceof Employee) {
 			EmployeeExtension.updateValidProperties(existingEmployee, employee);
 			employeeRepository.save(existingEmployee);
-			
+
 			EmployeeCreatedDto employeeCreatedDto = EmployeeCreatedDto.castToEmployeeCreatedDto(existingEmployee);
-        return employeeCreatedDto;
+			return employeeCreatedDto;
 		}
 		return null;
 	}
 
-	public void deleteEmployee(Long id) {
-		if (employeeRepository.findById(id).get() instanceof Employee) {
-			employeeRepository.deleteById(id);;
+	public Employee deleteEmployee(Long id) {
+		Optional<Employee> employee = employeeRepository.findById(id);
+		if (!employee.isPresent()) {
+			return null;
 		}
+
+		employeeRepository.deleteById(id);
+		return employee.get();
 	}
-	
-	}
+
+}

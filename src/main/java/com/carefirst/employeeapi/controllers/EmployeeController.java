@@ -56,11 +56,13 @@ public class EmployeeController {
 		return employeeApp.updateEmployee(id, employee);
 	}
 
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(HttpStatus.OK)
 	@DeleteMapping("/{id}")
 	public String deleteEmployee(@PathVariable Long id) {
-		employeeApp.deleteEmployee(id);
-		String exEmployee = id.toString();
-		return " =[ You just fired: " + exEmployee;
+		if (employeeApp.deleteEmployee(id) == null) {
+			throw new NotFoundException("User could not be found with id: "  + id);
+		}
+
+		return " =[ You just fired: " + id;
 	}
 }
