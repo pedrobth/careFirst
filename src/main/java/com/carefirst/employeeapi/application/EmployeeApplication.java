@@ -36,7 +36,6 @@ public class EmployeeApplication {
 		return new ArrayList<EmployeeDto>(employeeDtoList);
 	}
 
-//		Integer.parseInt(id);
 	public Employee getById(Long id) {
 		Optional<Employee> employee = employeeRepository.findById(id);
 		if (!employee.isPresent()) {

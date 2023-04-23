@@ -2,6 +2,7 @@ package com.carefirst.employeeapi.controllers;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carefirst.employeeapi.application.EmployeeApplication;
@@ -42,16 +44,19 @@ public class EmployeeController {
 		return ResponseEntity.ok(employeeResponse);
 	}
 
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
 	public EmployeeCreatedDto insertEmployee(@RequestBody Employee employee) {
 		return employeeApp.saveEmployee(employee);
 	}
 
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PutMapping("/{id}")
 	public EmployeeCreatedDto updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
 		return employeeApp.updateEmployee(id, employee);
 	}
 
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@DeleteMapping("/{id}")
 	public String deleteEmployee(@PathVariable Long id) {
 		employeeApp.deleteEmployee(id);
