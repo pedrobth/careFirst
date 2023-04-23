@@ -11,8 +11,9 @@ public class MyExceptionHandler{
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ResponseEntity<Object> handleNotFoundException(NotFoundException ex){
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);		
+	public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex){
+		ErrorResponse errorResponse = new ErrorResponse(ex.getLocalizedMessage());
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);		
 	}
 
 }
